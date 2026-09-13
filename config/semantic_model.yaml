@@ -1,0 +1,84 @@
+dataset:
+  name: fmcg_sales
+  description: >
+    Synthetic FMCG sales and distribution dataset used to demonstrate
+    an AI-powered commercial analytics workflow.
+
+dimensions:
+
+  product:
+    fields:
+      - product_id
+      - brand
+      - category
+      - sku
+
+  store:
+    fields:
+      - store_id
+      - store
+      - customer
+      - region
+
+measures:
+
+  sales_value:
+    expression: "SUM(sales_value)"
+    description: "Total monetary sales."
+
+  sales_units:
+    expression: "SUM(sales_units)"
+    description: "Total units sold."
+
+  stores_with_sku:
+    expression: >
+      COUNT(DISTINCT CASE
+        WHEN sales_value > 0 THEN store_id
+      END)
+    description: "Number of stores where the SKU has sales."
+
+  total_stores:
+    expression: "COUNT(DISTINCT store_id)"
+    description: "Total number of stores."
+
+  distribution:
+    expression: "stores_with_sku / total_stores"
+    description: "Percentage of stores carrying the SKU."
+
+  opportunity_rate:
+    expression: "1 - distribution"
+    description: >
+      Estimated distribution gap for a SKU.
+
+business_rules:
+
+  brand_sales:
+    remove_filters:
+      - sku
+      - product_id
+    description: >
+      Brand sales must be evaluated at brand level rather than
+      being constrained by the selected SKU.
+
+  opportunity:
+    condition: "sales_value = 0"
+    formula: "brand_sales * opportunity_rate"
+    description: >
+      An opportunity exists when a SKU has no sales in the
+      target store.
+
+  ranking:
+    order_by: "opportunity_value"
+    direction: "DESC"
+
+hierarchies:
+
+  product:
+    - category
+    - brand
+    - sku
+
+  customer:
+    - region
+    - customer
+    - store
