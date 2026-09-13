@@ -235,9 +235,3 @@ This is an independent portfolio project using synthetic data. It does not conta
 Rather than relying solely on a general-purpose language model, the architecture combines agent orchestration with deterministic analytical code, semantic definitions, and business rules.
 
 This creates a more controlled approach to answering business questions from structured FMCG data.
-
-Disclaimer
-
-This is an independent portfolio project using synthetic data.
-
-It does not contain or reproduce proprietary company data, credentials, code, prompts, schemas, or confidential business logic.
